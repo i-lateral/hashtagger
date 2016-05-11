@@ -1,0 +1,25 @@
+{
+    "name": "i-lateral/hashtagger",
+    "description": "Simple library for finding hashtags in string",
+    "keywords": ["HashTag", "Tagging"],
+    "type": "library",
+    "homepage": "https://github.com/i-lateral/hashtagger",
+    "license": "Facebook Platform",
+    "authors": [
+        {
+            "name": "ilateral",
+            "homepage": "http://ilateral.co.uk"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "5.x-dev"
+        }
+    }
+}
