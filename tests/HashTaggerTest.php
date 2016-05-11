@@ -12,8 +12,13 @@ use HashTagger\HashTagger;
  * @author Mo <morven@ilateral.co.uk>
  */
 class HashTaggerTest extends \PHPUnit_Framework_TestCase
-{
+{    
     /**
+     * @var HashTagger
+     */
+    private $html_tagger;
+ 
+   /**
      * @var array
      */
     private $str_tags = array();
@@ -40,7 +45,7 @@ class HashTaggerTest extends \PHPUnit_Framework_TestCase
         $tagger = new HashTagger($this->str_with_tags);
         $this->str_tags = $tagger->get_tags();
 
-        $tagger = new HashTagger($this->html_with_tags);
+        $this->html_tagger = new HashTagger($this->html_with_tags);
         $this->html_tags = $tagger->get_tags();
     }
 
@@ -74,4 +79,39 @@ class HashTaggerTest extends \PHPUnit_Framework_TestCase
         $this->assertNotContains($this->bad_hashtag, $this->html_tags);
     }
 
+    /**
+     * Test wrapping a tag in a span (default)
+     */
+    public function testWrapTags()
+    {
+        $html = $this
+            ->html_tagger
+            ->wrap_tags();
+                
+        $this->assertContains('<span>#hashtag</span>', $html);
+    }
+
+    /**
+     * Test wrapping a tag in a span with an attribute
+     */
+    public function testWrapTagsAttribute()
+    {
+        $html = $this
+            ->html_tagger
+            ->wrap_tags("span", array("class" => "hashtag"));
+                
+        $this->assertContains('<span class="hashtag">#hashtag</span>', $html);
+    }
+
+    /**
+     * Test wrapping a tag in an a with a href using the tag name
+     */
+    public function testWrapTagsAnchor()
+    {
+        $html = $this
+            ->html_tagger
+            ->wrap_tags("a", array("href" => "http://site.com/link/to/{tag}"));
+                
+        $this->assertContains('<a href="http://site.com/link/to/hashtag">#hashtag</a>', $html);
+    }
 }
