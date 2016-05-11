@@ -48,6 +48,34 @@ Outputs:
       string(8) "#newtag"
     }
 
+## Wrapping/Converting tags into XML/HTML
+
+You can convert tags in the string into HTML elements using the "wrap_tags"
+method.
+
+Wrappping all tags in a strong element:
+
+        $new_string = $tagger->wrap_tags("strong");
+
+You can also add custom attributes to these elements, EG wrapping all tags in a
+strong element with the class "hashtag":
+
+        $new_string = $tagger->wrap_tags(
+            "strong",
+            array("class" => "hashtag")
+        );
+
+Finally, you can customise the attributes value to use the tag name (for example
+to build custom links) by adding the string {tag} to your attribute value, EG:
+
+        $new_string = $tagger->wrap_tags(
+            "a",
+            array("href" => "http://site.com/tag/{tag}")
+        );
+
+The above will wrap the tag in an anchor element with a custom href specifically
+for that tag.
+
 ## Future Development
 
 This is intended as a proof of concept. In time it would be nice to add a method
