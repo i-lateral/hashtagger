@@ -78,5 +78,6 @@ for that tag.
 
 ## Future Development
 
-This is intended as a proof of concept. In time it would be nice to add a method
-to add html "a" tags to the provided string.
+This lib covers all the basic functionality, but it would be nice to tweak the
+wrapping method so that it ignores tags that have already been wrapped in an
+element.
