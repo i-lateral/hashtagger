@@ -15,7 +15,7 @@ spl_autoload_register(function ($class) {
     $prefix = 'HashTagger\\';
 
     // base directory for the namespace prefix
-    $baseDir = __DIR__ . '/HashTagger/';
+    $baseDir = __DIR__ . '/src/HashTagger/';
 
     // does the class use the namespace prefix?
     $len = strlen($prefix);
