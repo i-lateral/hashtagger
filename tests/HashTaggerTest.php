@@ -32,7 +32,9 @@ class HashTaggerTest extends \PHPUnit_Framework_TestCase
 
     private $str_without_tags = "This string contains no hashtags";
 
-    private $html_with_tags = "<p>This is a <strong>string</strong> with a #hashtag, a #bad-hashtag and an <em>#ok_hashtag</em></p>";
+    private $html_with_tags = "<p>This is a <strong>string</strong> with a &#39; special character, #hashtag, a #bad-hashtag and an <em>#ok_hashtag</em></p>";
+
+    private $html_character = "#39";
 
     private $good_hashtag = "#hashtag";
 
@@ -62,6 +64,11 @@ class HashTaggerTest extends \PHPUnit_Framework_TestCase
     public function testGetHashTagBad()
     {
         $this->assertNotContains($this->bad_hashtag, $this->str_tags);
+    }
+
+    public function testGetHashTagSpecialCharacter()
+    {
+        $this->assertNotContains($this->html_character, $this->html_tags);
     }
 
     public function testGetHashTagHTMLGood()

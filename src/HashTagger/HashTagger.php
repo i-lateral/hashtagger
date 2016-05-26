@@ -114,7 +114,8 @@ class HashTagger
             throw new HashTaggerIncorrectParamException("No string to parse");
         }
 
-        preg_match_all("/(#\w+)/", $this->original_string, $results);
+        // Match all hashtags (except those used in special characters)
+        preg_match_all("/((?<!\&)#\w+)/", $this->original_string, $results);
 
         if (is_array($results) && is_array($results[0])) {
             $this->tags = $results[0];
