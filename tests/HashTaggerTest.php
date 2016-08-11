@@ -32,9 +32,11 @@ class HashTaggerTest extends \PHPUnit_Framework_TestCase
 
     private $str_without_tags = "This string contains no hashtags";
 
-    private $html_with_tags = "<p>This is a <strong>string</strong> with a &#39; special character, #hashtag, a #bad-hashtag and an <em>#ok_hashtag</em></p>";
+    private $html_with_tags = '<p>This is a <strong>string</strong> with a &#39; special character, #hashtag, a #bad-hashtag, an <em>#ok_hashtag</em> and a <a href="http://www.ilateral.co.uk/work/#testtag">link</a></p>';
 
     private $html_character = "#39";
+
+    private $link_hashtag = "#testtag";
 
     private $good_hashtag = "#hashtag";
 
@@ -51,36 +53,67 @@ class HashTaggerTest extends \PHPUnit_Framework_TestCase
         $this->html_tags = $tagger->get_tags();
     }
 
+    /**
+     * Does hashtagger find a "standard" tag with only alpha numeric
+     * characters in strings.
+     */
     public function testGetHashTagGood()
     {
         $this->assertContains($this->good_hashtag, $this->str_tags);
     }
 
+    /**
+     * Does hashtagger include underscores (_) from strings?
+     */
     public function testGetHashTagOK()
     {
         $this->assertContains($this->ok_hashtag, $this->str_tags);
     }
 
+    /**
+     * Does hashtagger ignore hyphens (-)?
+     */
     public function testGetHashTagBad()
     {
         $this->assertNotContains($this->bad_hashtag, $this->str_tags);
     }
 
+    /**
+     * Does hashtagger ignore special characters that use a #?
+     */
     public function testGetHashTagSpecialCharacter()
     {
         $this->assertNotContains($this->html_character, $this->html_tags);
     }
 
+    /**
+     * Does hashtagger ignore links with a # in them?
+     */
+    public function testGetHashTagLink()
+    {   
+        $this->assertNotContains($this->link_hashtag, $this->html_tags);
+    }
+
+    /**
+     * Does hashtagger find tags in HTML?
+     */
     public function testGetHashTagHTMLGood()
     {
         $this->assertContains($this->good_hashtag, $this->html_tags);
     }
 
+    /**
+     * Does hashtagger include underscores (_) in HTML?
+     */
     public function testGetHashTagHTMLOK()
     {
         $this->assertContains($this->ok_hashtag, $this->html_tags);
     }
 
+
+    /**
+     * Does hashtagger ignore hyphens (-) in HTML?
+     */
     public function testGetHashTagHTMLBad()
     {
         $this->assertNotContains($this->bad_hashtag, $this->html_tags);
@@ -95,7 +128,7 @@ class HashTaggerTest extends \PHPUnit_Framework_TestCase
             ->html_tagger
             ->wrap_tags();
                 
-        $this->assertContains('<span>#hashtag</span>', $html);
+        $this->assertContains("<span>$this->good_hashtag</span>", $html);
     }
 
     /**
@@ -107,7 +140,7 @@ class HashTaggerTest extends \PHPUnit_Framework_TestCase
             ->html_tagger
             ->wrap_tags("span", array("class" => "hashtag"));
                 
-        $this->assertContains('<span class="hashtag">#hashtag</span>', $html);
+        $this->assertContains('<span class="hashtag">' . $this->good_hashtag . '</span>', $html);
     }
 
     /**
@@ -119,6 +152,6 @@ class HashTaggerTest extends \PHPUnit_Framework_TestCase
             ->html_tagger
             ->wrap_tags("a", array("href" => "http://site.com/link/to/{tag}"));
                 
-        $this->assertContains('<a href="http://site.com/link/to/hashtag">#hashtag</a>', $html);
+        $this->assertContains('<a href="http://site.com/link/to/hashtag">' . $this->good_hashtag . '</a>', $html);
     }
 }
