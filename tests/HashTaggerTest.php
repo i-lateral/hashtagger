@@ -16,27 +16,32 @@ class HashTaggerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var HashTagger
      */
-    private $html_tagger;
- 
+    private $str_tagger;
+
    /**
      * @var array
      */
     private $str_tags = array();
 
     /**
+     * @var HashTagger
+     */
+    private $html_tagger;
+
+    /**
      * @var array
      */
     private $html_tags = array();
 
-    private $str_with_tags = "This is a string with a #hashtag, a #bad-hashtag and an #ok_hashtag";
+    private $str_with_tags = "This is a string with a #hashtag, a #bad-hashtag and an #ok_hashtag and a link http://www.ilateral.co.uk/work/#linktag";
 
     private $str_without_tags = "This string contains no hashtags";
 
-    private $html_with_tags = '<p>This is a <strong>string</strong> with a &#39; special character, #hashtag, a #bad-hashtag, an <em>#ok_hashtag</em> and a <a href="http://www.ilateral.co.uk/work/#testtag">link</a></p>';
+    private $html_with_tags = '<p>This is a <strong>string</strong> with a &#39; special character, #hashtag, a #bad-hashtag, an <em>#ok_hashtag</em> and a <a href="http://www.ilateral.co.uk/work/#linktag">link</a></p>';
 
     private $html_character = "#39";
 
-    private $link_hashtag = "#testtag";
+    private $link_hashtag = "#linktag";
 
     private $good_hashtag = "#hashtag";
 
@@ -47,10 +52,12 @@ class HashTaggerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $tagger = new HashTagger($this->str_with_tags);
+        $this->str_tagger = $tagger;
         $this->str_tags = $tagger->get_tags();
 
-        $this->html_tagger = new HashTagger($this->html_with_tags);
-        $this->html_tags = $tagger->get_tags();
+        $html_tagger = new HashTagger($this->html_with_tags);
+        $this->html_tagger = $html_tagger;
+        $this->html_tags = $html_tagger->get_tags();
     }
 
     /**
@@ -77,6 +84,14 @@ class HashTaggerTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertNotContains($this->bad_hashtag, $this->str_tags);
     }
+    
+    /**
+     * Does hashtagger ignore urls with a # in them?
+     */
+    public function testGetHashTagLink()
+    {   
+        $this->assertNotContains($this->link_hashtag, $this->str_tags);
+    }
 
     /**
      * Does hashtagger ignore special characters that use a #?
@@ -84,14 +99,6 @@ class HashTaggerTest extends \PHPUnit_Framework_TestCase
     public function testGetHashTagSpecialCharacter()
     {
         $this->assertNotContains($this->html_character, $this->html_tags);
-    }
-
-    /**
-     * Does hashtagger ignore links with a # in them?
-     */
-    public function testGetHashTagLink()
-    {   
-        $this->assertNotContains($this->link_hashtag, $this->html_tags);
     }
 
     /**
@@ -117,6 +124,14 @@ class HashTaggerTest extends \PHPUnit_Framework_TestCase
     public function testGetHashTagHTMLBad()
     {
         $this->assertNotContains($this->bad_hashtag, $this->html_tags);
+    }
+
+    /**
+     * Does hashtagger ignore links with a # in them in HTML?
+     */
+    public function testGetHashTagHTMLLink()
+    {   
+        $this->assertNotContains($this->link_hashtag, $this->html_tags);
     }
 
     /**
