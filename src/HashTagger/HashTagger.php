@@ -115,7 +115,8 @@ class HashTagger
         }
 
         // Match all hashtags (except those used in special characters)
-        preg_match_all("/((?<!\&)#\w+)/", $this->original_string, $results);
+        // This is generated using regex101.com using the regex: /((?<!\&)(?<=^|[\s\>])#[\w\_]+)/g 
+        preg_match_all("/((?<!\\&)(?<=^|[\\s\\>])#[\\w\\_]+)/", $this->original_string, $results);
 
         if (is_array($results) && is_array($results[0])) {
             $this->tags = $results[0];
